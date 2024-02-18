@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.slf4j.Logger;
 
+import java.util.Map;
+
 @Controller
 public class SampleController {
 
@@ -25,10 +27,10 @@ public class SampleController {
     }
 
     @PostMapping("/emit")
-    public ResponseEntity<String> emit(@RequestBody String message) {
+    public ResponseEntity<String> emit(@RequestBody Map<String, String> map) {
         log.info("Emit to myQueue");
-        template.setExchange("fanout");
-        template.convertAndSend( message);
+        template.setExchange("direct");
+        template.convertAndSend(map.get("key"), map.get("message"));
         return ResponseEntity.ok("Success emit to queue");
     }
 }

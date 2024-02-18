@@ -42,6 +42,7 @@ public class RabbitConfig {
         return new Queue("myQueue2");
     }
 
+    //FANOUT
     @Bean
     public FanoutExchange fanoutExchange(){
         return new FanoutExchange("fanout");
@@ -58,7 +59,25 @@ public class RabbitConfig {
         return BindingBuilder.bind(myQueue2()).to(fanoutExchange());
     }
 
+    //DIRECT
+    @Bean
+    public DirectExchange directExchange(){
+        return new DirectExchange("direct");
+    }
+    @Bean
+    public Binding binding3(){
+        return BindingBuilder.bind(myQueue1()).to(directExchange()).with("warning");
+    }
 
+    @Bean
+    public Binding binding4(){
+        return BindingBuilder.bind(myQueue1()).to(directExchange()).with("info");
+    }
+
+    @Bean
+    public Binding binding5(){
+        return BindingBuilder.bind(myQueue2()).to(directExchange()).with("error");
+    }
 
 
 
