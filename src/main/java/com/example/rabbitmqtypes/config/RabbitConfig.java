@@ -1,9 +1,8 @@
 package com.example.rabbitmqtypes.config;
 
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -34,16 +33,42 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue myQueue(){
-        return new Queue("myQueue");
+    public Queue myQueue1(){
+        return new Queue("myQueue1");
     }
 
     @Bean
-    public SimpleMessageListenerContainer messageListenerContainer(){
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory());
-        container.setQueueNames("myQueue");
-        container.setMessageListener(message -> log.info("Received from myQueue: "+ new String(message.getBody())));
-        return container;
+    public Queue myQueue2(){
+        return new Queue("myQueue2");
     }
+
+    @Bean
+    public FanoutExchange fanoutExchange(){
+        return new FanoutExchange("fanout");
+    }
+
+
+    @Bean
+    public Binding binding1(){
+        return BindingBuilder.bind(myQueue1()).to(fanoutExchange());
+    }
+
+    @Bean
+    public Binding binding2(){
+        return BindingBuilder.bind(myQueue2()).to(fanoutExchange());
+    }
+
+
+
+
+
+
+//    @Bean
+//    public SimpleMessageListenerContainer messageListenerContainer(){
+//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//        container.setConnectionFactory(connectionFactory());
+//        container.setQueueNames("myQueue");
+//        container.setMessageListener(message -> log.info("Received from myQueue: "+ new String(message.getBody())));
+//        return container;
+//    }
 }
