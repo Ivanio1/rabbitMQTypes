@@ -1,21 +1,16 @@
 package com.example.rabbitmqtypes.config;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.slf4j.Logger;
 
 @Configuration
 public class RabbitConfig {
-
-    Logger log =  LoggerFactory.getLogger(RabbitConfig.class);
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -80,6 +75,21 @@ public class RabbitConfig {
     }
 
 
+    //TOPIC
+    @Bean
+    public TopicExchange topicExchange(){
+        return new TopicExchange("topic");
+    }
+
+    @Bean
+    public Binding binding6(){
+        return BindingBuilder.bind(myQueue1()).to(topicExchange()).with("one.*");
+    }
+
+    @Bean
+    public Binding binding7(){
+        return BindingBuilder.bind(myQueue2()).to(topicExchange()).with("two.*");
+    }
 
 
 //    @Bean

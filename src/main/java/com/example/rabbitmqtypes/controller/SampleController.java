@@ -2,7 +2,6 @@ package com.example.rabbitmqtypes.controller;
 
 import com.example.rabbitmqtypes.config.RabbitConfig;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class SampleController {
     @PostMapping("/emit")
     public ResponseEntity<String> emit(@RequestBody Map<String, String> map) {
         log.info("Emit to myQueue");
-        template.setExchange("direct");
+        template.setExchange("topic");
         template.convertAndSend(map.get("key"), map.get("message"));
         return ResponseEntity.ok("Success emit to queue");
     }
